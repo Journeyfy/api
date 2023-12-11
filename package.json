@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "fastify": "^4.24.3"
+  },
+  "name": "journeyfy-api",
+  "description": "",
+  "version": "1.0.0",
+  "main": "app.ts",
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "dev": "ts-node-dev src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Journeyfy/api.git"
+  },
+  "author": "Alessandro Di Roma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Journeyfy/api/issues"
+  },
+  "homepage": "https://github.com/Journeyfy/api#readme"
+}

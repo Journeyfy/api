@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@fastify/mysql": "^4.2.0",
     "fastify": "^4.24.3"
   },
   "name": "journeyfy-api",

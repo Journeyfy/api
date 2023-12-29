@@ -1,14 +1,17 @@
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastify from "fastify";
-import dbConnector from "./plugins/mysql-connector";
+import { destinationRouter } from "./api/routes/destinationRouter";
+import dbConnector from "./plugins/mysqlConnector";
 
-const server = fastify();
+const server = fastify().withTypeProvider<TypeBoxTypeProvider>();
 
+// db
 server.register(dbConnector);
 
-server.get("/ping", async (req, res) => {
-  const [rows] = await server.mysql.query("SELECT name FROM destination limit ?", [10]);
-  res.send(rows);
-});
+// routes
+server.register(destinationRouter, { prefix: "/api/v1" });
+
+// services
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {

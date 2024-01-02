@@ -1,9 +1,9 @@
-export interface DestinationDto {
+export interface SlimDestinationDto {
     idDestination: number;
     name: string;
     popularity?: number;
 }
 
-export interface DestinationWithImageDto extends DestinationDto {
+export interface DestinationDto extends SlimDestinationDto {
     image?: string;
 }

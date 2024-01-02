@@ -1,17 +1,15 @@
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastify from "fastify";
-import { destinationRouter } from "./api/routes/destinationRouter";
 import dbConnector from "./plugins/mysqlConnector";
+import controllers from "./api/controllers";
 
 const server = fastify().withTypeProvider<TypeBoxTypeProvider>();
 
 // db
 server.register(dbConnector);
 
-// routes
-server.register(destinationRouter, { prefix: "/api/v1" });
-
-// services
+// controllers
+server.register(controllers, {prefix: "/api/v1"});
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {

@@ -2,6 +2,7 @@ import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastify from "fastify";
 import dbConnector from "./plugins/mysqlConnector";
 import controllers from "./api/controllers";
+import { Env } from "./env";
 
 const server = fastify().withTypeProvider<TypeBoxTypeProvider>();
 

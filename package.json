@@ -17,7 +17,7 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "dev": "ts-node-dev src/app.ts",
+    "dev": "ts-node-dev --env-file=./configs/.env src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js"
   },

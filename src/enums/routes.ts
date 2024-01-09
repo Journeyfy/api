@@ -3,4 +3,7 @@ export enum Routes {
   GetDestinations = "/destinations",
   GetDestinationById = "/destinations/:id",
   GetDestinationActivities = GetDestinationById + "/activities/:type",
+
+  // user
+  CreateUser = "/users",
 }

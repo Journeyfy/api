@@ -1,6 +1,6 @@
-import { TodoType } from "../../enums/todoTypes";
+import { TodoType } from "../../../enums/todoTypes";
 
-export interface ActivityDto {
+export interface DestinationActivityDto {
   readonly id: number;
   readonly type: TodoType;
   readonly mapLink?: string;

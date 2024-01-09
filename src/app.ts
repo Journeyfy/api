@@ -1,6 +1,7 @@
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastify from "fastify";
 import controllers from "./api/controllers";
+import "./plugins/dayjsExtensions";
 import dbConnector from "./plugins/mysqlConnector";
 
 const port = Number(process.env.PORT) || 3000;

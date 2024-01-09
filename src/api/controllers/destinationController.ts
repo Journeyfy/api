@@ -3,14 +3,19 @@ import _ from "lodash";
 import {
   SlimDestinationDto,
   DestinationDto,
-} from "../../models/dto/destinationDto";
+} from "../../models/dto/destination/destination.dto";
 import {
   GetDestinationByTermRequest,
   GetDestinationByTermRequestType,
 } from "../schemas/destination/requests/getByTerm";
 import { Routes } from "../../enums/routes";
 import { GetDestinationActivitiesRequestType } from "../schemas/destination/requests/getActivities";
-import { ActivityDto } from "../../models/dto/activityDto";
+import { DestinationActivityDto } from "../../models/dto/destination/destinationActivity.dto";
+import {
+  DestinationDbo,
+  DestinationWithImageDbo,
+} from "../../models/dbo/destination.dbo";
+import { DestinationTodoDbo } from "../../models/dbo/todo.dbo";
 
 const destinationController = async (fastify: FastifyInstance) => {
   /** Get destination(s) by term */
@@ -30,10 +35,12 @@ const destinationController = async (fastify: FastifyInstance) => {
       const statement = includeImage
         ? "SELECT t0.idDestination, t0.name, t0.popularity, t1.image FROM destination as t0 LEFT JOIN destinationcoverimage as t1 ON t1.idDestination = t0.idDestination WHERE t0.name LIKE ?"
         : "SELECT t0.idDestination, t0.name, t0.popularity FROM destination as t0 WHERE name LIKE ?";
-      const [data] = await fastify.mysql.execute(statement, [`${term}%`]);
+      const [data] = await fastify.mysql.execute<
+        DestinationDbo[] | DestinationWithImageDbo[]
+      >(statement, [`${term}%`]);
       const result = includeImage
         ? _.map(
-            data as any[],
+            data,
             (d) =>
               ({
                 idDestination: d.idDestination,
@@ -43,7 +50,7 @@ const destinationController = async (fastify: FastifyInstance) => {
               } as DestinationDto)
           )
         : _.map(
-            data as any[],
+            data,
             (d) =>
               ({
                 idDestination: d.idDestination,
@@ -58,14 +65,17 @@ const destinationController = async (fastify: FastifyInstance) => {
   /** Get destination activities */
   fastify.get<{
     Params: GetDestinationActivitiesRequestType;
-    Reply: ActivityDto[];
+    Reply: DestinationActivityDto[];
   }>(Routes.GetDestinationActivities, async (req, rep) => {
     const { id, type } = req.params;
     const statement =
       "SELECT t0.idTodo, t0.idDestination, t0.type, t0.mapLink, t0.openAt, t0.closeAt FROM todo as t0 WHERE t0.idDestination = ? AND t0.type = ?";
-    const [data] = await fastify.mysql.execute(statement, [id, type]);
+    const [data] = await fastify.mysql.execute<DestinationTodoDbo[]>(
+      statement,
+      [id, type]
+    );
     return _.map(
-      data as any[],
+      data,
       (d) =>
         ({
           id: d.idTodo,
@@ -73,7 +83,7 @@ const destinationController = async (fastify: FastifyInstance) => {
           mapLink: d.mapLink,
           openAt: d.openAt,
           closeAt: d.closeAt,
-        } as ActivityDto)
+        } as DestinationActivityDto)
     );
   });
 };

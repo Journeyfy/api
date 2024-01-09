@@ -3,12 +3,17 @@
     "@fastify/mysql": "^4.2.0",
     "@fastify/type-provider-typebox": "^3.6.0",
     "@sinclair/typebox": "^0.32.4",
+    "@types/bcrypt": "^5.0.2",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.10.4",
+    "@types/uuid": "^9.0.7",
+    "bcrypt": "^5.1.1",
+    "dayjs": "^1.11.10",
     "fastify": "^4.24.3",
     "lodash": "^4.17.21",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "uuid": "^9.0.1"
   },
   "name": "journeyfy-api",
   "description": "",

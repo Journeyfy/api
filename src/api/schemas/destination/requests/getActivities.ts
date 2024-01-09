@@ -3,7 +3,9 @@ import { TodoType } from "../../../../enums/todoTypes";
 
 export const GetDestinationActivitiesRequest = Type.Object({
   id: Type.Integer(),
-  type: Type.Unsafe<TodoType>()
+  type: Type.Enum(TodoType),
 });
 
-export type GetDestinationActivitiesRequestType = Static<typeof GetDestinationActivitiesRequest>;
+export type GetDestinationActivitiesRequestType = Static<
+  typeof GetDestinationActivitiesRequest
+>;

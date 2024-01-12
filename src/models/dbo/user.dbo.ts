@@ -7,5 +7,6 @@ export interface UserDbo extends BaseDbo {
   readonly email: string;
   readonly password: string;
   readonly idRole: number;
+  readonly picture: string;
   readonly registeredOnUtc: Date;
 }

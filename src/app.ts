@@ -3,17 +3,22 @@ import fastify from "fastify";
 import controllers from "./api/controllers";
 import "./plugins/dayjsExtensions";
 import dbConnector from "./plugins/mysqlConnector";
+import oAuthSetup from "./plugins/oAuthSetup";
+import { Env } from "./env";
 
 const port = Number(process.env.PORT) || 3000;
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const server = fastify().withTypeProvider<TypeBoxTypeProvider>();
 
+// oAuth setup
+server.register(oAuthSetup);
+
 // db
 server.register(dbConnector);
 
 // controllers
-server.register(controllers, { prefix: "/api/v1" });
+server.register(controllers);
 
 server.listen({ port, host }, (err, address) => {
   if (err) {

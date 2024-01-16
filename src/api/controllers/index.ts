@@ -1,12 +1,18 @@
 import { FastifyInstance } from "fastify";
 import destinationController from "./destinationController";
 import userController from "./userController";
-import oauthController from "./oauthController";
+import oAuthController from "./oAuthController";
+import { Env } from "../../env";
+import authenticationController from "./authenticationController";
 
 const controllers = async (fastify: FastifyInstance) => {
+  fastify.register(authenticationController, { prefix: "/api/v1" });
   fastify.register(destinationController, { prefix: "/api/v1" });
   fastify.register(userController, { prefix: "/api/v1" });
-  fastify.register(oauthController);
+
+  if (Env.GOOGLE_CLIENT_ID != null && Env.GOOGLE_CLIENT_SECRET != null) {
+    fastify.register(oAuthController);
+  }
 };
 
 export default controllers;

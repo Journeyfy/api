@@ -9,7 +9,7 @@ declare module "fastify" {
   }
 }
 
-async function oAuthSetup(fastify: FastifyInstance) {
+async function googleOAuthSetup(fastify: FastifyInstance) {
   fastify.register(oAuthPlugin, {
     name: "googleOAuth2",
     scope: ["email", "profile"],
@@ -25,4 +25,4 @@ async function oAuthSetup(fastify: FastifyInstance) {
   });
 }
 
-export default fastifyPlugin(oAuthSetup);
+export const googleOAuthSetupPlugin = fastifyPlugin(googleOAuthSetup);

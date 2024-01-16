@@ -4,7 +4,7 @@ import { UserDbo } from "../../models/dbo/user.dbo";
 import { v4 } from "uuid";
 import dayjs from "dayjs";
 
-const oauthController = async (fastify: FastifyInstance) => {
+const oAuthController = async (fastify: FastifyInstance) => {
   fastify.get("/oauth/google/callback", async function (req, rep) {
     const { token } =
       await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
@@ -35,7 +35,22 @@ const oauthController = async (fastify: FastifyInstance) => {
     let [[user]] = await getUserByMailAsync(gUserInfo.email);
     if (user != null) {
       // TODO
-      // return JWT & User
+      const payload = {
+        id: user.idUser,
+        email: user.email,
+        role: user.idRole,
+      };
+      const token = await rep.jwtSign(payload);
+      return rep
+        .setCookie("access_token", token, {
+          domain: "localhost",
+          path: "/api",
+          secure: true, // send cookie over HTTPS only
+          httpOnly: true,
+          sameSite: true, // alternative CSRF protection
+          maxAge: 604800, // 7d
+        })
+        .send();
     } else {
       const statement =
         "INSERT INTO `user`(`idUser`, `firstName`, `lastName`, `email`, `password`, `idRole`, `picture`, `registeredOnUtc`) VALUES (?,?,?,?,?,?,?,?)";
@@ -50,11 +65,25 @@ const oauthController = async (fastify: FastifyInstance) => {
         dayjs.utc().format(),
       ]);
 
-      // return [[await getUserByMailAsync(gUserInfo.email)]];
-      // TODO
-      // return JWT & User
+      let [[user]] = await getUserByMailAsync(gUserInfo.email);
+      const payload = {
+        id: user.idUser,
+        email: user.email,
+        role: user.idRole,
+      };
+      const token = await rep.jwtSign(payload);
+      return rep
+        .setCookie("access_token", token, {
+          domain: "localhost",
+          path: "/api",
+          secure: true, // send cookie over HTTPS only
+          httpOnly: true,
+          sameSite: true, // alternative CSRF protection
+          maxAge: 604800, // 7d
+        })
+        .send();
     }
   });
 };
 
-export default oauthController;
+export default oAuthController;

@@ -1,4 +1,7 @@
 export enum Routes {
+  // authentication
+  Login = "/login",
+
   // destinations
   GetDestinations = "/destinations",
   GetDestinationById = "/destinations/:id",

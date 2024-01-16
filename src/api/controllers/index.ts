@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import destinationController from "./destinationController";
 import userController from "./userController";
-import oAuthController from "./oAuthController";
+import oAuthController from "./oauthController";
 import { Env } from "../../env";
 import authenticationController from "./authenticationController";
 

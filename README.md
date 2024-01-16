@@ -1,4 +1,4 @@
-# api
+# Journeyfy api
 
 ## Sviluppo
 Creare nella carella radice una cartella "configs" e aggiungere il file ".env".  

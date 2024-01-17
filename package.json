@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@fastify/awilix": "^4.0.0",
     "@fastify/cookie": "^9.3.0",
     "@fastify/jwt": "^8.0.0",
     "@fastify/mysql": "^4.2.0",
@@ -11,11 +12,13 @@
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.4",
     "@types/uuid": "^9.0.7",
+    "awilix": "^10.0.1",
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
     "dayjs": "^1.11.10",
     "fastify": "^4.25.2",
     "lodash": "^4.17.21",
+    "mysql2": "^3.7.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3",
     "uuid": "^9.0.1"

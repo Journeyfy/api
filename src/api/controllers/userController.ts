@@ -1,11 +1,7 @@
-import dayjs from "dayjs";
 import { FastifyInstance } from "fastify";
 import _ from "lodash";
-import { v4 } from "uuid";
 import { RoleType } from "../../enums/roleTypes";
 import { Routes } from "../../enums/routes";
-import { UserDbo } from "../../models/dbo/user.dbo";
-import { UserDto } from "../../models/dto/user/user.dto";
 import { hashAsync } from "../../utils/cryptography";
 import {
   CreateUserReply,
@@ -15,6 +11,8 @@ import {
 } from "../schemas/user/createUser";
 
 const userController = async (fastify: FastifyInstance) => {
+  const userService = fastify.diContainer.cradle.userService;
+
   /** User registration */
   fastify.post<{ Body: CreateUserRequestType; Reply: CreateUserReplyType }>(
     Routes.CreateUser,
@@ -24,37 +22,24 @@ const userController = async (fastify: FastifyInstance) => {
     async (req, rep) => {
       const { firstName, lastName, email, password, confirmPassword, role } =
         req.body;
+
       if (!_.isEqual(password, confirmPassword)) {
         throw new Error("Le password non coincidono");
       }
-      const idUser = v4();
+
       const hashedPwd = await hashAsync(password);
       const userRole = role ?? RoleType.User;
-      const registrationDateTimeUtc = dayjs.utc().format(); // YYYY-MM-DDTHH:mm:ssz
 
-      const statement =
-        "INSERT INTO `user`(`idUser`, `firstName`, `lastName`, `email`, `password`, `idRole`, `registeredOnUtc`) VALUES (?,?,?,?,?,?,?)";
-      await fastify.mysql.execute(statement, [
-        idUser,
+      const newUser = await userService.createUserAsync(
         firstName,
         lastName,
         email.trim(),
         hashedPwd,
         userRole,
-        registrationDateTimeUtc,
-      ]);
-
-      const [[newUser]] = await fastify.mysql.execute<UserDbo[]>(
-        "SELECT * FROM user WHERE idUser = ?",
-        [idUser]
+        null
       );
 
-      return rep.send({
-        idUser: newUser.idUser,
-        displayName: `${newUser.firstName} ${newUser.lastName}`,
-        email: newUser.email,
-        role: newUser.idRole,
-      } as UserDto);
+      return newUser ? rep.send(newUser) : rep.status(500).send(newUser);
     }
   );
 };

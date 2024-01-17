@@ -1,17 +1,14 @@
 import { FastifyInstance } from "fastify";
 import { Routes } from "../../enums/routes";
-import { UserDbo } from "../../models/dbo/user.dbo";
 import { compareHashAsync } from "../../utils/cryptography";
 import {
   AuthRequest,
   AuthRequestType,
 } from "../schemas/authentication/authRequest";
-import {
-  AuthResponse,
-  AuthResponseType,
-} from "../schemas/authentication/authResponse";
 
 const authenticationController = async (fastify: FastifyInstance) => {
+  const userRepository = fastify.diContainer.cradle.userRepository;
+
   fastify.post<{ Body: AuthRequestType }>(
     Routes.Login,
     {
@@ -20,10 +17,7 @@ const authenticationController = async (fastify: FastifyInstance) => {
       },
     },
     async (req, rep) => {
-      const [[user]] = await fastify.mysql.execute<UserDbo[]>(
-        "SELECT * FROM user WHERE email = ?",
-        [req.body.email]
-      );
+      const user = await userRepository.getUserByEmailAsync(req.body.email);
 
       if (user == null) {
         rep.status(404);
@@ -44,7 +38,7 @@ const authenticationController = async (fastify: FastifyInstance) => {
             secure: true, // send cookie over HTTPS only
             httpOnly: true,
             sameSite: true, // alternative CSRF protection
-            maxAge: 604800 // 7d
+            maxAge: 604800, // 7d
           })
           .send();
       } else {

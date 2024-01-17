@@ -7,6 +7,8 @@ import { Env } from "../env";
 import fastifyPlugin from "fastify-plugin";
 import { v4 } from "uuid";
 import { RoleType } from "../enums/roleTypes";
+import { IJWtPayload } from "../models/contracts/IJwtPayload";
+import { IJwtUserFormat } from "../models/contracts/IJwtUserFormat";
 
 declare module "fastify" {
   interface FastifyInstance
@@ -20,12 +22,8 @@ declare module "fastify" {
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
-    payload: { id: string; email: string; role: RoleType };
-    user: {
-      id: string;
-      email: string;
-      role: RoleType;
-    }; // user type is return type of `request.user` object
+    payload: IJWtPayload;
+    user: IJwtUserFormat; // user type is return type of `request.user` object
   }
 }
 

@@ -6,7 +6,7 @@ import "./plugins/dayjsExtensions";
 import jwtConfigurationPlugin from "./plugins/jwtConfiguration";
 import dbConnector from "./plugins/mysqlConnector";
 import { googleOAuthSetupPlugin } from "./plugins/oAuthSetup";
-import cookiePlugin from "@fastify/cookie";
+import dependencyInjectionSetup from "./plugins/dependencyInjection";
 
 const port = Number(process.env.PORT) || 3000;
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
@@ -27,7 +27,8 @@ server.register(dbConnector);
 // jwt configuration
 server.register(jwtConfigurationPlugin);
 
-
+// dependency injection
+server.register(dependencyInjectionSetup);
 
 // controllers
 server.register(controllers);

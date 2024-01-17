@@ -1,15 +1,16 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { FastifyInstance } from "fastify";
-import { UserDbo } from "../../models/dbo/user.dbo";
-import { v4 } from "uuid";
-import dayjs from "dayjs";
 
 const oAuthController = async (fastify: FastifyInstance) => {
+  const userRepository = fastify.diContainer.cradle.userRepository;
+  const userService = fastify.diContainer.cradle.userService;
+
   fastify.get("/oauth/google/callback", async function (req, rep) {
     const { token } =
       await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
 
     /**
+     * Campi da prendere da api google
      * email,
      * given_name
      * family_name
@@ -25,21 +26,14 @@ const oAuthController = async (fastify: FastifyInstance) => {
       }
     );
 
-    async function getUserByMailAsync(mail: string) {
-      return fastify.mysql.execute<UserDbo[]>(
-        "SELECT * FROM user WHERE email = ?",
-        [mail]
-      );
-    }
-
-    let [[user]] = await getUserByMailAsync(gUserInfo.email);
+    const user = await userService.getUserByEmailAsync(gUserInfo.email);
     if (user != null) {
-      // TODO
       const payload = {
         id: user.idUser,
         email: user.email,
-        role: user.idRole,
+        role: user.role,
       };
+
       const token = await rep.jwtSign(payload);
       return rep
         .setCookie("access_token", token, {
@@ -52,25 +46,20 @@ const oAuthController = async (fastify: FastifyInstance) => {
         })
         .send();
     } else {
-      const statement =
-        "INSERT INTO `user`(`idUser`, `firstName`, `lastName`, `email`, `password`, `idRole`, `picture`, `registeredOnUtc`) VALUES (?,?,?,?,?,?,?,?)";
-      await fastify.mysql.execute(statement, [
-        v4(),
+      const newUser = await userService.createUserAsync(
         gUserInfo.given_name,
         gUserInfo.family_name,
         gUserInfo.email,
         null,
         3,
-        gUserInfo.picture,
-        dayjs.utc().format(),
-      ]);
-
-      let [[user]] = await getUserByMailAsync(gUserInfo.email);
+        gUserInfo.picture
+      );
       const payload = {
-        id: user.idUser,
-        email: user.email,
-        role: user.idRole,
+        id: newUser!.idUser,
+        email: newUser!.email,
+        role: newUser!.role,
       };
+
       const token = await rep.jwtSign(payload);
       return rep
         .setCookie("access_token", token, {

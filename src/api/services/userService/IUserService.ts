@@ -1,4 +1,4 @@
-import { RoleType } from "../../../enums/roleTypes";
+import { RoleEnum } from "../../../enums/role.enum";
 import { UserDto } from "../../../models/dto/user/user.dto";
 
 export interface IUserService {
@@ -9,7 +9,7 @@ export interface IUserService {
     lastName: string,
     email: string,
     password: string | null,
-    idRole: RoleType,
+    idRole: RoleEnum,
     picture: string | null
   ) => Promise<UserDto | undefined>;
 }

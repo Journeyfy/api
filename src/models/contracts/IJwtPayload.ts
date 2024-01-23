@@ -1,7 +1,7 @@
-import { RoleType } from "../../enums/roleTypes";
+import { RoleEnum } from "../../enums/role.enum";
 
 export interface IJWtPayload {
   id: string;
   email: string;
-  role: RoleType;
+  role: RoleEnum;
 }

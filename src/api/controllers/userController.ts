@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import _ from "lodash";
-import { RoleType } from "../../enums/roleTypes";
+import { RoleEnum } from "../../enums/role.enum";
 import { Routes } from "../../enums/routes";
 import { hashAsync } from "../../utils/cryptography";
 import {
@@ -28,7 +28,7 @@ const userController = async (fastify: FastifyInstance) => {
       }
 
       const hashedPwd = await hashAsync(password);
-      const userRole = role ?? RoleType.User;
+      const userRole = role ?? RoleEnum.User;
 
       const newUser = await userService.createUserAsync(
         firstName,

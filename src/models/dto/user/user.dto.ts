@@ -1,8 +1,8 @@
-import { RoleType } from "../../../enums/roleTypes";
+import { RoleEnum } from "../../../enums/role.enum";
 
 export interface UserDto {
   readonly idUser: string;
   readonly displayName: string;
   readonly email: string;
-  readonly role: RoleType;
+  readonly role: RoleEnum;
 }

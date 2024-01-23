@@ -1,5 +1,5 @@
 import { Static, Type } from "@sinclair/typebox";
-import { RoleType } from "../../../enums/roleTypes";
+import { RoleEnum } from "../../../enums/role.enum";
 import { UserDto } from "../../../models/dto/user/user.dto";
 
 export const CreateUserRequest = Type.Object({
@@ -8,7 +8,7 @@ export const CreateUserRequest = Type.Object({
   email: Type.Readonly(Type.String({ format: "email" })),
   password: Type.Readonly(Type.String({ minLength: 8 })),
   confirmPassword: Type.Readonly(Type.String({})),
-  role: Type.ReadonlyOptional(Type.Enum(RoleType)),
+  role: Type.ReadonlyOptional(Type.Enum(RoleEnum)),
 });
 
 export const CreateUserReply = Type.Unsafe<UserDto>();

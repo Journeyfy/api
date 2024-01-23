@@ -3,10 +3,9 @@ import jwtPlugin, {
   VerifyPayloadType,
 } from "@fastify/jwt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { Env } from "../env";
 import fastifyPlugin from "fastify-plugin";
 import { v4 } from "uuid";
-import { RoleType } from "../enums/roleTypes";
+import { Env } from "../env";
 import { IJWtPayload } from "../models/contracts/IJwtPayload";
 import { IJwtUserFormat } from "../models/contracts/IJwtUserFormat";
 

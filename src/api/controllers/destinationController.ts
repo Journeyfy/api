@@ -5,7 +5,6 @@ import {
   mapDestinationEntityToDto,
   mapDestinationWithImageEntityToDto,
 } from "../../mappings/dbo2dto/destinationMappings";
-import { mapTodoEntityToDto } from "../../mappings/dbo2dto/todoMappings";
 import {
   DestinationDbo,
   DestinationWithImageDbo,
@@ -14,18 +13,14 @@ import {
   DestinationDto,
   SlimDestinationDto,
 } from "../../models/dto/destination/destination.dto";
-import { DestinationActivityDto } from "../../models/dto/destination/destinationActivity.dto";
-import {
-  GetDestinationActivitiesRequest,
-  GetDestinationActivitiesRequestType,
-} from "../schemas/destination/requests/getActivities";
 import {
   GetDestinationByTermRequest,
   GetDestinationByTermRequestType,
 } from "../schemas/destination/requests/getByTerm";
 
 const destinationController = async (fastify: FastifyInstance) => {
-  const { destinationRepository, todoRepository } = fastify.diContainer.cradle;
+  const destinationRepository =
+    fastify.diContainer.cradle.destinationRepository;
 
   /** Get destination(s) by term */
   fastify.get<{
@@ -54,20 +49,6 @@ const destinationController = async (fastify: FastifyInstance) => {
           );
 
       return rep.send(final);
-    }
-  );
-
-  /** Get destination activities */
-  fastify.get<{
-    Params: GetDestinationActivitiesRequestType;
-    Reply: DestinationActivityDto[];
-  }>(
-    Routes.GetDestinationActivities,
-    { schema: { params: GetDestinationActivitiesRequest } },
-    async (req, rep) => {
-      const { id, type } = req.params;
-      const todos = await todoRepository.getTodoAsync(id, type);
-      return _.map(todos, (t) => mapTodoEntityToDto(t));
     }
   );
 };

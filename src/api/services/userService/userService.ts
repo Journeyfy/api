@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { v4 } from "uuid";
-import { RoleType } from "../../../enums/roleTypes";
+import { RoleEnum } from "../../../enums/role.enum";
 import { mapUserEntityToDto } from "../../../mappings/dbo2dto/userMappings";
 import { IUserRepository } from "../../repositories/userRepository/IUserRepository";
 
@@ -19,7 +19,7 @@ const userService = (userRepository: IUserRepository) => {
       lastName: string,
       email: string,
       password: string | null,
-      idRole: RoleType,
+      idRole: RoleEnum,
       picture: string | null
     ) => {
       const idUser = v4();

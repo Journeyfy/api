@@ -30,7 +30,7 @@
   "scripts": {
     "dev": "ts-node-dev --env-file=./configs/.env.development src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node --env-file=.env.production dist/app.js"
   },
   "repository": {
     "type": "git",

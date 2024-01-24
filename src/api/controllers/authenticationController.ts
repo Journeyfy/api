@@ -30,16 +30,7 @@ const authenticationController = async (fastify: FastifyInstance) => {
           role: user.idRole,
         };
         const token = await rep.jwtSign(payload);
-        return rep
-          .setCookie("access_token", token, {
-            domain: "localhost",
-            path: "/api",
-            secure: true, // send cookie over HTTPS only
-            httpOnly: true,
-            sameSite: true, // alternative CSRF protection
-            maxAge: 604800, // 7d
-          })
-          .send();
+        return rep.setAuthCookie(token, req.hostname).send();
       } else {
         throw new Error("Username o password errati");
       }

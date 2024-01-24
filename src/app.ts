@@ -3,11 +3,11 @@ import fastify from "fastify";
 import controllers from "./api/controllers";
 import { Env } from "./env";
 import "./plugins/dayjsExtensions";
+import dependencyInjectionSetup from "./plugins/dependencyInjection";
 import jwtConfigurationPlugin from "./plugins/jwtConfiguration";
 import dbConnector from "./plugins/mysqlConnector";
 import { googleOAuthSetupPlugin } from "./plugins/oAuthSetup";
-import dependencyInjectionSetup from "./plugins/dependencyInjection";
-
+import replyDecorators from "./decorators/replyDecorators";
 const port = Number(process.env.PORT) || 3000;
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
@@ -21,11 +21,11 @@ if (Env.GOOGLE_CLIENT_ID != null && Env.GOOGLE_CLIENT_SECRET != null) {
 // db
 server.register(dbConnector);
 
-// cookie registration
-// server.register(cookiePlugin);
-
 // jwt configuration
 server.register(jwtConfigurationPlugin);
+
+// decorators
+server.register(replyDecorators);
 
 // dependency injection
 server.register(dependencyInjectionSetup);

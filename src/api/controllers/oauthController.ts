@@ -35,16 +35,7 @@ const oAuthController = async (fastify: FastifyInstance) => {
       };
 
       const token = await rep.jwtSign(payload);
-      return rep
-        .setCookie("access_token", token, {
-          domain: "localhost",
-          path: "/api",
-          secure: true, // send cookie over HTTPS only
-          httpOnly: true,
-          sameSite: true, // alternative CSRF protection
-          maxAge: 604800, // 7d
-        })
-        .send();
+      return rep.setAuthCookie(token, req.hostname).send();
     } else {
       const newUser = await userService.createUserAsync(
         gUserInfo.given_name,
@@ -61,16 +52,7 @@ const oAuthController = async (fastify: FastifyInstance) => {
       };
 
       const token = await rep.jwtSign(payload);
-      return rep
-        .setCookie("access_token", token, {
-          domain: "localhost",
-          path: "/api",
-          secure: true, // send cookie over HTTPS only
-          httpOnly: true,
-          sameSite: true, // alternative CSRF protection
-          maxAge: 604800, // 7d
-        })
-        .send();
+      return rep.setAuthCookie(token, req.hostname).send();
     }
   });
 };

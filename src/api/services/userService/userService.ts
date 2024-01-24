@@ -31,7 +31,7 @@ const userService = (userRepository: IUserRepository) => {
         password: password,
         idRole: idRole ?? 3,
         picture: picture,
-        registeredOnUtc: dayjs.utc().format(),
+        registeredOnUtc: dayjs.utc().format("YYYY-MM-DD HH:mm:ss"),
       });
 
       const createdUser = await userRepository.getUserByIdAsync(idUser);

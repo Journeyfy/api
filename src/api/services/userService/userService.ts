@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { v4 } from "uuid";
-import { RoleEnum } from "../../../enums/role.enum";
+import { RoleEnum } from "../../../enums/roleEnum";
 import { mapUserEntityToDto } from "../../../mappings/dbo2dto/userMappings";
 import { IUserRepository } from "../../repositories/userRepository/IUserRepository";
 
@@ -29,10 +29,9 @@ const userService = (userRepository: IUserRepository) => {
         lastName: lastName,
         email: email,
         password: password,
-        idRole: 3,
+        idRole: idRole ?? 3,
         picture: picture,
         registeredOnUtc: dayjs.utc().format(),
-        constructor: { name: "RowDataPacket" },
       });
 
       const createdUser = await userRepository.getUserByIdAsync(idUser);

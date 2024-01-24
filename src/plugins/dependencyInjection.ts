@@ -10,12 +10,15 @@ import destinationRepository from "../api/repositories/destinationRepository/des
 import suggestionRepository from "../api/repositories/suggestionRepository/suggestionRepository";
 import { IUserService } from "../api/services/userService/IUserService";
 import userService from "../api/services/userService/userService";
+import { ISuggestionRequestRepository } from "../api/repositories/suggestionRequestRepository/ISuggestionRequestRepository";
+import suggestionRequestRepository from "../api/repositories/suggestionRequestRepository/suggestionRequestRepository";
 
 declare module "@fastify/awilix" {
   interface Cradle {
     userRepository: IUserRepository;
     destinationRepository: IDestinationRepository;
     suggestionRepository: ISuggestionRepository;
+    suggestionRequestRepository: ISuggestionRequestRepository;
     userService: IUserService;
   }
 }
@@ -28,7 +31,12 @@ const dependencyInjectionSetup = async (fastify: FastifyInstance) => {
     destinationRepository: asFunction(() =>
       destinationRepository(fastify)
     ).scoped(),
-    suggestionRepository: asFunction(() => suggestionRepository(fastify)).scoped(),
+    suggestionRepository: asFunction(() =>
+      suggestionRepository(fastify)
+    ).scoped(),
+    suggestionRequestRepository: asFunction(() =>
+      suggestionRequestRepository(fastify)
+    ).scoped(),
     userService: asFunction(userService).scoped(),
   });
 };

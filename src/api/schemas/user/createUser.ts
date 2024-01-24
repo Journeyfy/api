@@ -1,5 +1,5 @@
 import { Static, Type } from "@sinclair/typebox";
-import { RoleEnum } from "../../../enums/role.enum";
+import { RoleEnum } from "../../../enums/roleEnum";
 import { UserDto } from "../../../models/dto/user/user.dto";
 
 export const CreateUserRequest = Type.Object({

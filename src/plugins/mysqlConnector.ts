@@ -2,6 +2,7 @@ import { MySQLPromiseConnection } from "@fastify/mysql";
 import { FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 import { Env } from "../env";
+import { RowDataPacket } from "mysql2";
 
 // if you passed promise = true, type = 'connection'
 declare module "fastify" {

@@ -23,7 +23,6 @@ const authenticationController = async (fastify: FastifyInstance) => {
         rep.status(404);
         throw new Error("Utente non trovato");
       }
-
       if (await compareHashAsync(req.body.password, user.password)) {
         const payload = {
           id: user.idUser,

@@ -1,6 +1,4 @@
-import { BaseDbo } from "./base.dbo";
-
-export interface SuggestionDbo extends BaseDbo {
+export interface SuggestionDbo {
   readonly idSuggestion: number;
   readonly idDestination: number;
   readonly type: number;

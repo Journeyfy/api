@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { ISuggestionRepository } from "./ISuggestionRepository";
 import { SuggestionDbo } from "../../../models/dbo/suggestion.dbo";
+import { RowDataPacket } from "mysql2";
 
 const suggestionRepository = (
   fastify: FastifyInstance
@@ -17,7 +18,7 @@ const suggestionRepository = (
             [idDestination],
           ];
       return fastify.mysql
-        .execute<SuggestionDbo[]>(statement, params)
+        .execute<SuggestionDbo[] & RowDataPacket[]>(statement, params)
         .then(
           ([suggestions]) => suggestions,
           (err) => {

@@ -1,4 +1,4 @@
-import { SuggestionEnum } from "../../../enums/suggestion.enum";
+import { SuggestionEnum } from "../../../enums/suggestionEnum";
 
 export interface SuggestionDto {
   readonly id: number;

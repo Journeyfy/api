@@ -6,9 +6,10 @@ export enum Routes {
   GetDestinations = "/destinations",
   GetDestinationById = "/destinations/:id",
   
-  // todos
+  // suggestions
   SuggestionResource = "/suggestions",
-  GetDestinationActivities = SuggestionResource + "/:idDestination/:type?",
+  GetDestinationSuggestions = SuggestionResource + "/:idDestination/:type?",
+  PostDestinationSuggestionRequest = SuggestionResource + "/addRequest",
 
   // user
   CreateUser = "/users",

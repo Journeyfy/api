@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import _ from "lodash";
-import { RoleEnum } from "../../enums/role.enum";
+import { RoleEnum } from "../../enums/roleEnum";
 import { Routes } from "../../enums/routes";
 import { hashAsync } from "../../utils/cryptography";
 import {

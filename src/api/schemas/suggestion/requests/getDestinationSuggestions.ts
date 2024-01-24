@@ -1,5 +1,5 @@
 import { Static, Type } from "@sinclair/typebox";
-import { SuggestionEnum } from "../../../../enums/suggestion.enum";
+import { SuggestionEnum } from "../../../../enums/suggestionEnum";
 
 export const GetDestinationSuggestionsRequest = Type.Object({
   idDestination: Type.Readonly(Type.Integer()),

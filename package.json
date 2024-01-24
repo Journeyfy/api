@@ -28,7 +28,7 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "dev": "ts-node-dev --env-file=./configs/.env src/app.ts",
+    "dev": "ts-node-dev --env-file=./configs/.env.development src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js"
   },

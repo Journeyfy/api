@@ -13,10 +13,7 @@ const userRepository = (fastify: FastifyInstance): IUserRepository => {
           [email]
         )
         .then(
-          ([[user]]) => {
-            console.log(user);
-            return user;
-          },
+          ([[user]]) => user,
           (err) => {
             throw new Error(err);
           }

@@ -38,14 +38,14 @@ async function jwtConfigurationPlugin(fastify: FastifyInstance) {
       algorithm: "HS256",
       expiresIn: "7d",
       jti: v4(),
-      aud: ["http://localhost:3000"],
-      iss: "http://localhost:3000",
+      aud: Env.JWT_AUD,
+      iss: Env.JWT_ISS,
     },
     verify: {
       key: Env.JWT_SECRET,
       algorithms: ["HS256"],
-      allowedAud: ["http://localhost:3000"],
-      allowedIss: ["http://localhost:3000"],
+      allowedAud: Env.JWT_VALID_AUD,
+      allowedIss: Env.JWT_VALID_ISS,
     },
     formatUser: (user) => ({ id: user.id, email: user.email, role: user.role }),
   });

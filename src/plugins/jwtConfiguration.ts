@@ -9,16 +9,6 @@ import { Env } from "../env";
 import { IJWtPayload } from "../models/contracts/IJwtPayload";
 import { IJwtUserFormat } from "../models/contracts/IJwtUserFormat";
 
-declare module "fastify" {
-  interface FastifyInstance
-    extends FastifyJwtNamespace<{ namespace: "security" }> {
-    authenticate: (
-      request: FastifyRequest,
-      reply: FastifyReply
-    ) => Promise<VerifyPayloadType>;
-  }
-}
-
 declare module "@fastify/jwt" {
   interface FastifyJWT {
     payload: IJWtPayload;
@@ -49,17 +39,6 @@ async function jwtConfigurationPlugin(fastify: FastifyInstance) {
     },
     formatUser: (user) => ({ id: user.id, email: user.email, role: user.role }),
   });
-
-  fastify.decorate(
-    "authenticate",
-    async function (request: FastifyRequest, reply: FastifyReply) {
-      try {
-        return await request.jwtVerify();
-      } catch (err) {
-        return reply.send(err);
-      }
-    }
-  );
 }
 
 export default fastifyPlugin(jwtConfigurationPlugin);

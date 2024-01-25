@@ -8,6 +8,7 @@ import jwtConfigurationPlugin from "./plugins/jwtConfiguration";
 import dbConnector from "./plugins/mysqlConnector";
 import { googleOAuthSetupPlugin } from "./plugins/oAuthSetup";
 import replyDecorators from "./decorators/replyDecorators";
+import serverDecorators from "./decorators/serverDecorators";
 const port = Number(process.env.PORT) || 3000;
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
@@ -25,6 +26,7 @@ server.register(dbConnector);
 server.register(jwtConfigurationPlugin);
 
 // decorators
+server.register(serverDecorators);
 server.register(replyDecorators);
 
 // dependency injection

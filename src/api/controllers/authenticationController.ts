@@ -5,6 +5,7 @@ import {
   AuthRequest,
   AuthRequestType,
 } from "../schemas/authentication/authRequest";
+import { RoleEnum } from "../../enums/roleEnum";
 
 const authenticationController = async (fastify: FastifyInstance) => {
   const userRepository = fastify.diContainer.cradle.userRepository;
@@ -39,7 +40,9 @@ const authenticationController = async (fastify: FastifyInstance) => {
 
   fastify.get(
     "/jwtTest",
-    { onRequest: [fastify.authenticate] },
+    {
+      onRequest: [fastify.authenticate],
+    },
     async (req, rep) => {
       return rep.send(req.user);
     }

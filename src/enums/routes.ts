@@ -9,7 +9,10 @@ export enum Routes {
   // suggestions
   SuggestionResource = "/suggestions",
   GetDestinationSuggestions = SuggestionResource + "/:idDestination/:type?",
+  DeleteSuggestion = SuggestionResource + "/:idSuggestion",
+  GetSuggestionRequests = SuggestionResource + "/getRequests/:status?",
   PostDestinationSuggestionRequest = SuggestionResource + "/addRequest",
+  UpdateDestinationSuggestionRequest = SuggestionResource + "/updateRequest",
 
   // user
   CreateUser = "/users",

@@ -12,12 +12,28 @@ import {
   PostDestinationSuggestionRequestRequestType,
 } from "../schemas/suggestion/requests/postDestinationSuggestionRequest";
 import { v4 } from "uuid";
+import { RoleEnum } from "../../enums/roleEnum";
+import {
+  UpdateDestinationSuggestionRequestRequest,
+  UpdateDestinationSuggestionRequestRequestType,
+} from "../schemas/suggestion/requests/updateDestinationSuggestionRequest";
+import {
+  DeleteSuggestionRequest,
+  DeleteSuggestionRequestType,
+} from "../schemas/suggestion/requests/deleteSuggestionRequest";
+import {
+  GetSuggestionRequestsRequest,
+  GetSuggestionRequestsRequestType,
+} from "../schemas/suggestion/requests/getSuggestionRequests";
+import { SuggestionRequestDto } from "../../models/dto/suggestionRequest/suggestionRequest.dto";
 
 const suggestionController = async (fastify: FastifyInstance) => {
   // di
   const suggestionRepository = fastify.diContainer.cradle.suggestionRepository;
   const suggestionRequestRepository =
     fastify.diContainer.cradle.suggestionRequestRepository;
+  const suggestionRequestService =
+    fastify.diContainer.cradle.suggestionRequestService;
 
   /** Get todo for specified destination */
   fastify.get<{
@@ -37,7 +53,47 @@ const suggestionController = async (fastify: FastifyInstance) => {
     }
   );
 
-  //#region Suggestion requests from users
+  fastify.delete<{ Params: DeleteSuggestionRequestType }>(
+    Routes.DeleteSuggestion,
+    {
+      onRequest: [fastify.authenticate],
+      config: { allowedRoles: [RoleEnum.Administrator] },
+      preHandler: [fastify.authorize],
+      schema: { params: DeleteSuggestionRequest },
+    },
+    async (req, rep) => {
+      const toDeleteSuggestion = await suggestionRepository.getSingleAsync(
+        req.params.idSuggestion
+      );
+
+      if (toDeleteSuggestion == null) {
+        return rep.status(404).send("Suggerimento di guida non trovato");
+      }
+
+      await suggestionRepository.deleteAsync(req.params.idSuggestion);
+      return rep.send("Suggerimento di guida eliminato correttamente");
+    }
+  );
+
+  //#region Suggestion requests
+  fastify.get<{
+    Params: GetSuggestionRequestsRequestType;
+    Reply: SuggestionRequestDto[];
+  }>(
+    Routes.GetSuggestionRequests,
+    {
+      onRequest: [fastify.authenticate],
+      config: { allowedRoles: [RoleEnum.Administrator, RoleEnum.Moderator] },
+      preHandler: [fastify.authorize],
+      schema: { params: GetSuggestionRequestsRequest },
+    },
+    async (req, rep) => {
+      return await suggestionRequestService.getSuggestionRequests(
+        req.params.status
+      );
+    }
+  );
+
   fastify.post<{ Body: PostDestinationSuggestionRequestRequestType }>(
     Routes.PostDestinationSuggestionRequest,
     {
@@ -62,6 +118,44 @@ const suggestionController = async (fastify: FastifyInstance) => {
       });
 
       return rep.send("Richiesta effettuata!");
+    }
+  );
+
+  fastify.post<{ Body: UpdateDestinationSuggestionRequestRequestType }>(
+    Routes.UpdateDestinationSuggestionRequest,
+    {
+      onRequest: [fastify.authenticate],
+      schema: {
+        body: UpdateDestinationSuggestionRequestRequest,
+      },
+    },
+    async (req, rep) => {
+      const { idRequest, status, title, mapLink, openAt, closeAt } = req.body;
+      const toUpdateRequest = await suggestionRequestRepository.getSingleAsync(
+        idRequest
+      );
+      if (toUpdateRequest == null)
+        return rep.status(404).send("Richiesta non trovata");
+
+      if (status != toUpdateRequest.status && req.user.role === RoleEnum.User) {
+        return rep
+          .status(401)
+          .send(
+            "Utente non autorizzato a modificare lo stato di una richiesta"
+          );
+      }
+
+      await suggestionRequestRepository.updateAsync(
+        idRequest,
+        status || toUpdateRequest.status,
+        toUpdateRequest.suggestionType,
+        title || toUpdateRequest.title,
+        mapLink,
+        openAt,
+        closeAt
+      );
+
+      return rep.send("Modifica effettuata!");
     }
   );
   //#endregion

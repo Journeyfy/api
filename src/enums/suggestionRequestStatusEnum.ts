@@ -1,5 +1,5 @@
 export enum SuggestionRequestStatusEnum {
     Pending = 1,
-    Accepted,
+    Released,
     Rejected
 }

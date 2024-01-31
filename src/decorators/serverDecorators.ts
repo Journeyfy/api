@@ -2,6 +2,7 @@ import { FastifyJwtNamespace, VerifyPayloadType } from "@fastify/jwt";
 import fastifyPlugin from "fastify-plugin";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import _ from "lodash";
+import { RoleEnum } from "../enums/roleEnum";
 
 declare module "fastify" {
   interface FastifyInstance
@@ -11,6 +12,10 @@ declare module "fastify" {
       reply: FastifyReply
     ) => Promise<VerifyPayloadType>;
     authorize: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+  }
+
+  interface FastifyContextConfig {
+    allowedRoles?: RoleEnum[];
   }
 }
 
@@ -29,7 +34,7 @@ async function serverDecoratorsPlugin(fastify: FastifyInstance) {
   fastify.decorate(
     "authorize",
     async function (reqest: FastifyRequest, reply: FastifyReply) {
-      const authorizedRoles = (reqest.routeOptions.config as any).allowedRoles;
+      const authorizedRoles = reqest.routeOptions.config.allowedRoles;
       if (
         authorizedRoles != null &&
         !_.isEmpty(authorizedRoles) &&

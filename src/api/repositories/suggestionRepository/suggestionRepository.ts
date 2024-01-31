@@ -7,6 +7,18 @@ const suggestionRepository = (
   fastify: FastifyInstance
 ): ISuggestionRepository => {
   return {
+    getSingleAsync: (idSuggestion) =>
+      fastify.mysql
+        .execute<SuggestionDbo[] & RowDataPacket[]>(
+          "SELECT * FROM `suggestion` WHERE `idSuggestion` = ?",
+          [idSuggestion]
+        )
+        .then(
+          ([[suggestion]]) => suggestion,
+          (err) => {
+            throw new Error(err);
+          }
+        ),
     getSuggestionsForDestinationAsync: (idDestination, suggestionType) => {
       const [statement, params] = suggestionType
         ? [
@@ -26,6 +38,11 @@ const suggestionRepository = (
           }
         );
     },
+    deleteAsync: (idSuggestion) =>
+      fastify.mysql.execute(
+        "DELETE FROM `suggestion` WHERE `idSuggestion` = ?",
+        [idSuggestion]
+      ),
   };
 };
 

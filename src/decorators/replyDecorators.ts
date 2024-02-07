@@ -13,7 +13,7 @@ async function replyDecoratorsPlugin(fastify: FastifyInstance) {
     function (token: string, domain: string) {
       return this.setCookie("access_token", token, {
         domain: domain.split(":")![0],
-        path: "/api",
+        path: "/",
         secure: true, // send cookie over HTTPS only
         httpOnly: true,
         sameSite: true, // alternative CSRF protection

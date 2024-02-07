@@ -1,6 +1,7 @@
 export enum Routes {
   // authentication
   Login = "/login",
+  Logout = "/logout",
 
   // destinations
   GetDestinations = "/destinations",

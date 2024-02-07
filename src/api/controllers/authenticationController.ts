@@ -1,16 +1,17 @@
 import { FastifyInstance } from "fastify";
 import { Routes } from "../../enums/routes";
+import { mapUserEntityToSlimDto } from "../../mappings/dbo2dto/userMappings";
 import { compareHashAsync } from "../../utils/cryptography";
 import {
   AuthRequest,
   AuthRequestType,
 } from "../schemas/authentication/authRequest";
-import { RoleEnum } from "../../enums/roleEnum";
+import { UserDbo } from "../../models/dbo/user.dbo";
 
 const authenticationController = async (fastify: FastifyInstance) => {
   const userRepository = fastify.diContainer.cradle.userRepository;
 
-  fastify.post<{ Body: AuthRequestType }>(
+  fastify.post<{ Body: AuthRequestType; Reply: UserDbo }>(
     Routes.Login,
     {
       schema: {
@@ -31,10 +32,23 @@ const authenticationController = async (fastify: FastifyInstance) => {
           role: user.idRole,
         };
         const token = await rep.jwtSign(payload);
-        return rep.setAuthCookie(token, req.hostname).send();
+        return rep
+          .setAuthCookie(token, req.hostname)
+          .send(mapUserEntityToSlimDto(user));
       } else {
         throw new Error("Username o password errati");
       }
+    }
+  );
+
+  fastify.get(
+    Routes.Logout,
+    {
+      onRequest: [fastify.authenticate],
+    },
+    async (req, rep) => {
+      rep.clearCookie("access_token");
+      return;
     }
   );
 

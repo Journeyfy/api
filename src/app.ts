@@ -11,7 +11,7 @@ import replyDecorators from "./decorators/replyDecorators";
 import serverDecorators from "./decorators/serverDecorators";
 import cors from "@fastify/cors";
 
-const port = Number(process.env.PORT) || 3000;
+const port = Number(process.env.PORT) || 5050;
 const host = "RENDER" in process.env ? `0.0.0.0` : `localhost`;
 
 const server = fastify().withTypeProvider<TypeBoxTypeProvider>();
@@ -31,6 +31,16 @@ server.register(jwtConfigurationPlugin);
 server.register(serverDecorators);
 server.register(replyDecorators);
 
+// hooks
+server.addHook('onRequest', (req, rep, done) => {
+  // Some code
+  const authHeader = req.cookies["access_token"];
+  if (authHeader) {
+    req.headers.authorization = `Bearer ${authHeader}`;
+  }
+  done()
+})
+
 // dependency injection
 server.register(dependencyInjectionSetup);
 
@@ -39,8 +49,9 @@ server.register(controllers);
 
 // cors
 server.register(cors, {
-  origin: "*",
+  origin: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 });
 
 server.listen({ port, host }, (err, address) => {

@@ -7,7 +7,7 @@ import {
   SlimDestinationDto,
 } from "../../models/dto/destination/destination.dto";
 
-export function mapDestinationEntityToDto(
+export function mapDestinationEntityToSlimDto(
   entity: DestinationDbo
 ): SlimDestinationDto {
   return {
@@ -17,7 +17,7 @@ export function mapDestinationEntityToDto(
   };
 }
 
-export function mapDestinationWithImageEntityToDto(
+export function mapDestinationEntityToDto(
   entity: DestinationWithImageDbo
 ): DestinationDto {
   return {

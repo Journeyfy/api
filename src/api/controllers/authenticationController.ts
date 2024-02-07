@@ -1,12 +1,12 @@
 import { FastifyInstance } from "fastify";
 import { Routes } from "../../enums/routes";
-import { mapUserEntityToSlimDto } from "../../mappings/dbo2dto/userMappings";
+import { mapUserEntityToDto } from "../../mappings/dbo2dto/userMappings";
+import { UserDbo } from "../../models/dbo/user.dbo";
 import { compareHashAsync } from "../../utils/cryptography";
 import {
   AuthRequest,
   AuthRequestType,
 } from "../schemas/authentication/authRequest";
-import { UserDbo } from "../../models/dbo/user.dbo";
 
 const authenticationController = async (fastify: FastifyInstance) => {
   const userRepository = fastify.diContainer.cradle.userRepository;
@@ -34,7 +34,7 @@ const authenticationController = async (fastify: FastifyInstance) => {
         const token = await rep.jwtSign(payload);
         return rep
           .setAuthCookie(token, req.hostname)
-          .send(mapUserEntityToSlimDto(user));
+          .send(mapUserEntityToDto(user));
       } else {
         throw new Error("Username o password errati");
       }

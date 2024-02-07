@@ -2,8 +2,8 @@ import { FastifyInstance } from "fastify";
 import _ from "lodash";
 import { Routes } from "../../enums/routes";
 import {
+  mapDestinationEntityToSlimDto,
   mapDestinationEntityToDto,
-  mapDestinationWithImageEntityToDto,
 } from "../../mappings/dbo2dto/destinationMappings";
 import {
   DestinationDbo,
@@ -17,6 +17,10 @@ import {
   GetDestinationByTermRequest,
   GetDestinationByTermRequestType,
 } from "../schemas/destination/requests/getByTerm";
+import {
+  GetDestinationByIdRequest,
+  GetDestinationByIdRequestType,
+} from "../schemas/destination/requests/getById";
 
 const destinationController = async (fastify: FastifyInstance) => {
   const destinationRepository =
@@ -42,13 +46,23 @@ const destinationController = async (fastify: FastifyInstance) => {
 
       const final = includeImage
         ? _.map(results as DestinationWithImageDbo[], (r) =>
-            mapDestinationWithImageEntityToDto(r)
+            mapDestinationEntityToDto(r)
           )
         : _.map(results as DestinationDbo[], (r) =>
-            mapDestinationEntityToDto(r)
+            mapDestinationEntityToSlimDto(r)
           );
 
       return rep.send(final);
+    }
+  );
+
+  /** Get destination details */
+  fastify.get<{ Params: GetDestinationByIdRequestType; Reply: DestinationDto }>(
+    Routes.GetDestinationById,
+    { schema: { params: GetDestinationByIdRequest } },
+    async (req, rep) => {
+      const result = await destinationRepository.getByIdAsync(req.params.id);
+      return result ? rep.send(mapDestinationEntityToDto(result)) : rep.status(404).send();
     }
   );
 };

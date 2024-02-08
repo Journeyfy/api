@@ -1,4 +1,7 @@
 export enum Routes {
+  // health
+  HealthCheck = "/healthcheck",
+
   // authentication
   Login = "/login",
   Logout = "/logout",
@@ -6,7 +9,7 @@ export enum Routes {
   // destinations
   GetDestinations = "/destinations",
   GetDestinationById = "/destinations/:id",
-  
+
   // suggestions
   SuggestionResource = "/suggestions",
   GetDestinationSuggestions = SuggestionResource + "/:idDestination/:type?",

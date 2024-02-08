@@ -7,6 +7,10 @@ import authenticationController from "./authenticationController";
 import suggestionController from "./suggestionController";
 
 const controllers = async (fastify: FastifyInstance) => {
+  // health check
+  fastify.get("/", async (req, rep) => rep.send("Welcome to Journeyfy apis"));
+
+  // controllers
   fastify.register(authenticationController, { prefix: "/api/v1" });
   fastify.register(destinationController, { prefix: "/api/v1" });
   fastify.register(suggestionController, { prefix: "/api/v1" });

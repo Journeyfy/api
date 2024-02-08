@@ -6,6 +6,7 @@ Il file .env deve essere così strutturato
 ```
 NODE_ENV=development
 CONNECTION_STRING=<your-connection-string-to-mysql-db>(es: mysql://root@localhost/journeyfy)
+COOKIE_DOMAIN=localhost
 
 # Jwt
 JWT_SECRET=<your-jwt-secret-string> #(es: una stringa alfanumerica di 32 caratteri)

@@ -1,18 +1,19 @@
 import { FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
+import { Env } from "../env";
 
 declare module "fastify" {
   interface FastifyReply {
-    setAuthCookie: (token: string, domain: string) => FastifyReply;
+    setAuthCookie: (token: string) => FastifyReply;
   }
 }
 
 async function replyDecoratorsPlugin(fastify: FastifyInstance) {
   fastify.decorateReply(
     "setAuthCookie",
-    function (token: string, domain: string) {
+    function (token: string) {
       return this.setCookie("access_token", token, {
-        domain: domain.split(":")![0],
+        domain: Env.COOKIE_DOMAIN,
         path: "/",
         secure: true, // send cookie over HTTPS only
         httpOnly: true,

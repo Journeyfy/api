@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FastifyInstance } from "fastify";
+import { mapUserEntityToDto } from "../../mappings/dbo2dto/userMappings";
 
 const oAuthController = async (fastify: FastifyInstance) => {
   const userRepository = fastify.diContainer.cradle.userRepository;
@@ -35,7 +36,7 @@ const oAuthController = async (fastify: FastifyInstance) => {
       };
 
       const token = await rep.jwtSign(payload);
-      return rep.setAuthCookie(token, req.hostname).send();
+      return rep.setAuthCookie(token).send(user);
     } else {
       const newUser = await userService.createUserAsync(
         gUserInfo.given_name,
@@ -52,7 +53,7 @@ const oAuthController = async (fastify: FastifyInstance) => {
       };
 
       const token = await rep.jwtSign(payload);
-      return rep.setAuthCookie(token, req.hostname).send();
+      return rep.setAuthCookie(token).send(newUser);
     }
   });
 };

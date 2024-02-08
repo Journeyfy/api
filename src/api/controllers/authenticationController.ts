@@ -33,7 +33,7 @@ const authenticationController = async (fastify: FastifyInstance) => {
         };
         const token = await rep.jwtSign(payload);
         return rep
-          .setAuthCookie(token, req.hostname)
+          .setAuthCookie(token)
           .send(mapUserEntityToDto(user));
       } else {
         throw new Error("Username o password errati");

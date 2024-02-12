@@ -9,6 +9,7 @@ export interface SuggestionRequestDto {
   readonly idUser: string;
   readonly requestType: SuggestionRequestEnum;
   readonly suggestionType: SuggestionEnum;
+  readonly idDestination: number;
   readonly idSuggestion?: number;
   readonly title: string;
   readonly mapLink?: string;

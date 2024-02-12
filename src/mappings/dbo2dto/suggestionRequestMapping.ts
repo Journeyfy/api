@@ -12,6 +12,7 @@ export function mapSuggestionRequestEntityToDto(
     idUser: entity.idUser,
     requestType: entity.requestType,
     suggestionType: entity.suggestionType,
+    idDestination: entity.idDestination,
     idSuggestion: entity.idSuggestion || undefined,
     title: entity.title,
     mapLink: entity.mapLink || undefined,

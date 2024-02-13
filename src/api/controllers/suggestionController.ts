@@ -130,7 +130,7 @@ const suggestionController = async (fastify: FastifyInstance) => {
       },
     },
     async (req, rep) => {
-      const { idRequest, status, title, mapLink, openAt, closeAt } = req.body;
+      const { idRequest, status } = req.body;
       const toUpdateRequest = await suggestionRequestRepository.getSingleAsync(
         idRequest
       );
@@ -145,14 +145,9 @@ const suggestionController = async (fastify: FastifyInstance) => {
           );
       }
 
-      await suggestionRequestRepository.updateAsync(
-        idRequest,
-        status || toUpdateRequest.status,
-        toUpdateRequest.suggestionType,
-        title || toUpdateRequest.title,
-        mapLink,
-        openAt,
-        closeAt
+      await suggestionRequestService.updateSuggestionRequest(
+        req.body,
+        toUpdateRequest
       );
 
       return rep.send("Modifica effettuata!");

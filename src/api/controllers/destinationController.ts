@@ -61,8 +61,13 @@ const destinationController = async (fastify: FastifyInstance) => {
     Routes.GetDestinationById,
     { schema: { params: GetDestinationByIdRequest } },
     async (req, rep) => {
-      const result = await destinationRepository.getByIdAsync(req.params.id);
-      return result ? rep.send(mapDestinationEntityToDto(result)) : rep.status(404).send();
+      const result = (await destinationRepository.getByIdAsync(
+        req.params.id,
+        true
+      )) as DestinationWithImageDbo | undefined;
+      return result
+        ? rep.send(mapDestinationEntityToDto(result))
+        : rep.status(404).send();
     }
   );
 };

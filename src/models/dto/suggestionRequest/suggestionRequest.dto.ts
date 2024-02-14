@@ -1,7 +1,6 @@
 import { SuggestionEnum } from "../../../enums/suggestionEnum";
 import { SuggestionRequestEnum } from "../../../enums/suggestionRequestEnum";
 import { SuggestionRequestStatusEnum } from "../../../enums/suggestionRequestStatusEnum";
-import { SlimUserDto } from "../user/slimUser.dto";
 
 export interface SuggestionRequestDto {
   readonly id: string;
@@ -10,6 +9,7 @@ export interface SuggestionRequestDto {
   readonly requestType: SuggestionRequestEnum;
   readonly suggestionType: SuggestionEnum;
   readonly idDestination: number;
+  readonly destinationName?: string;
   readonly idSuggestion?: number;
   readonly title: string;
   readonly mapLink?: string;

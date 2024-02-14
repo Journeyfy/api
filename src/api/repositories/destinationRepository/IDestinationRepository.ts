@@ -4,7 +4,7 @@ import {
 } from "../../../models/dbo/destination.dbo";
 
 export interface IDestinationRepository {
-  getByIdAsync: (id: number) => Promise<DestinationWithImageDbo | undefined>;
+  getByIdAsync: (id: number, includeImage?: boolean) => Promise<DestinationDbo | DestinationWithImageDbo | undefined>;
   getByTermAsync: (
     term: string,
     includeImage: boolean

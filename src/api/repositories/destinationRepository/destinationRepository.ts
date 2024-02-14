@@ -10,18 +10,19 @@ const destinationRepository = (
   fastify: FastifyInstance
 ): IDestinationRepository => {
   return {
-    getByIdAsync: (id: number) =>
-      fastify.mysql
-        .execute<DestinationWithImageDbo[] & RowDataPacket[]>(
-          "SELECT t0.idDestination, t0.name, t0.popularity, t1.image FROM destination as t0 LEFT JOIN destinationcoverimage as t1 ON t1.idDestination = t0.idDestination WHERE t0.idDestination = ?",
-          [id]
-        )
+    getByIdAsync: (id: number, includeImage?: boolean) => {
+      const statement = includeImage
+        ? "SELECT t0.idDestination, t0.name, t0.popularity, t1.image FROM destination as t0 LEFT JOIN destinationcoverimage as t1 ON t1.idDestination = t0.idDestination WHERE t0.idDestination = ?"
+        : "SELECT t0.idDestination, t0.name, t0.popularity FROM destination as t0 WHERE t0.idDestination = ?";
+      return fastify.mysql
+        .execute<(DestinationWithImageDbo[] | DestinationDbo[]) & RowDataPacket[]>(statement, [id])
         .then(
           ([[res]]) => res,
           (err) => {
             throw new Error(err);
           }
-        ),
+        );
+    },
     getByTermAsync: (term: string, includeImage: boolean) => {
       const statement = includeImage
         ? "SELECT t0.idDestination, t0.name, t0.popularity, t1.image FROM destination as t0 LEFT JOIN destinationcoverimage as t1 ON t1.idDestination = t0.idDestination WHERE t0.name LIKE ?"

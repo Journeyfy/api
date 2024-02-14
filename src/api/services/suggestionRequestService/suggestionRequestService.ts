@@ -8,18 +8,29 @@ import { UpdateDestinationSuggestionRequestRequestType } from "../../schemas/sug
 import { ISuggestionRepository } from "../../repositories/suggestionRepository/ISuggestionRepository";
 import { AddSuggestionDto } from "../../../models/dto/suggestion/addSuggestion.dto";
 import { SuggestionRequestEnum } from "../../../enums/suggestionRequestEnum";
+import { IDestinationRepository } from "../../repositories/destinationRepository/IDestinationRepository";
+import { SuggestionRequestDto } from "../../../models/dto/suggestionRequest/suggestionRequest.dto";
 
 const suggestionRequestService = (
   suggestionRequestRepository: ISuggestionRequestRepository,
-  suggestionRepository: ISuggestionRepository
+  suggestionRepository: ISuggestionRepository,
+  destinationRepository: IDestinationRepository
 ) => {
   return {
     getSuggestionRequests: async (status?: SuggestionRequestStatusEnum) => {
-      let suggestionRequests = status
+      const suggestionRequests = status
         ? await suggestionRequestRepository.getAllByStatusAsync(status)
         : await suggestionRequestRepository.getAllAsync();
 
-      return _.map(suggestionRequests, mapSuggestionRequestEntityToDto);
+      const result: SuggestionRequestDto[] = [];
+      await Promise.all(
+        suggestionRequests.map(async (req) => {
+          const res = await destinationRepository.getByIdAsync(req.idDestination);
+          result.push(mapSuggestionRequestEntityToDto(req, res));
+        })
+      );
+
+      return result;
     },
     updateSuggestionRequest: async (
       payload: UpdateDestinationSuggestionRequestRequestType,
